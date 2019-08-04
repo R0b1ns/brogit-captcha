@@ -60,7 +60,7 @@ $.fn.extend({
 					var token = btoa(nonces.join(';'));
 
 					if (typeof callback === 'function') {
-						callback(token, key, hashes, element);
+						callback(token, key, difficulty, hashes, element);
 						element.addClass('bg-success');
 					}
 				}

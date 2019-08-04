@@ -2,14 +2,32 @@
 <html>
 <head>
 	<title>Simple Proof of Work Captcha - Example &middot; Brogit</title>
-	<base href="/"><!-- needed in subdirectory -->
-	<script type="text/javascript" src="jquery-3.4.0.min.js"></script>
-	<script type="text/javascript" src="brogit.min.js"></script>
+	<base href="/brogit-captcha/"><!-- needed in subdirectory -->
+	<!-- ### Repo Sources ### -->
+	<!--
+	<script src="jquery-3.4.0.min.js"></script>
+	<script src="https://api.brogit.de/brogit.min.js"></script>
 	<script src="bootstrap-4.1.3-dist/js/bootstrap.min.js" async></script>
-	<link href="bootstrap-4.1.3-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-	<script type="text/javascript" src="sha256.min.js"></script>
+	<link rel="stylesheet" href="bootstrap-4.1.3-dist/css/bootstrap.min.css">
+	<script src="sha256.min.js"></script>
+	<script src="brogit.captcha.min.js" async></script>
+	-->
+	<!-- ### Online Sources (Easy to use) ### -->
+	<script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous"></script>
+	<script src="https://api.brogit.de/brogit.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" async></script>
+	<link
+		rel="stylesheet"
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+	<script src="https://api.brogit.de/brogit.captcha.min.js" async></script>
 	<script type="text/javascript">
-		function captchaCallback(token, key, hashes, element) {
+		function captchaCallback(token, key, difficulty, hashes, element) {
 			client.xhr('post', 'server.php/captcha', {token: token}, function(resultdata, data, textStatus, jqXHR) {
 				if(resultdata.status == 'success') {
 					element.addClass('bg-success');
@@ -36,7 +54,6 @@
 			});
 		});
 	</script>
-	<script type="text/javascript" src="brogit.captcha.min.js" async></script>
 </head>
 <body>
 	<!--
