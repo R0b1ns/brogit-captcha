@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Proof of Work Captcha - Example &middot; Brogit</title>
+	<base href="/"><!-- needed in subdirectory -->
+	<script type="text/javascript" src="jquery-3.4.0.min.js"></script>
+	<script type="text/javascript" src="brogit.min.js"></script>
+	<script src="bootstrap-4.1.3-dist/js/bootstrap.min.js" async></script>
+	<link href="bootstrap-4.1.3-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="sha256.min.js"></script>
+	<script type="text/javascript">
+		function captchaCallback(token, key, hashes, element) {
+			client.xhr('post', 'server.php/captcha', {token: token}, function(resultdata, data, textStatus, jqXHR) {
+				if(resultdata.status == 'success') {
+					element.addClass('bg-success');
+					$('.captchaExample button[type="submit"]').attr('disabled', false);
+				}
+				else {
+					element.addClass('bg-danger');
+				}
+			});
+		}
+
+		$(document).ready(function() {
+			client.xhr('get', 'server.php/captcha', null, function(resultdata, data, textStatus, jqXHR) {
+				if(resultdata.difficulty && resultdata.hashes && resultdata.key) {
+					var captcha = $('<div>Load Captcha...</div>');
+
+					captcha.brogit_captcha(resultdata.difficulty, resultdata.hashes, resultdata.key, captchaCallback);
+				}
+				else {
+					var captcha = $("<div>Can't load Captcha...</div>");
+				}
+
+				$('.captchaExample .form-captcha').append(captcha);
+			});
+		});
+	</script>
+	<script type="text/javascript" src="brogit.captcha.min.js" async></script>
+</head>
+<body>
+	<!--
+		Example 1 - How it should look like
+		<div class="brogit-captcha" data-difficulty="2" data-hashes="100" data-key="4256blhj2456" data-callback="captchaCallback">Load Captcha...</div>
+
+		Example 2 - Useful for Serverside Template Building
+		<div class="brogit-captcha" data-difficulty="{{hashes}}" data-hashes="{{hashes}}" data-key="{{key}}" data-callback="captchaCallback">Load Captcha...</div>
+
+		Example 3 - Above in JS. Build it with Request and JS.
+	-->
+	<div class="container my-4">
+		<form class="captchaExample">
+			<div class="form-group">
+				<label for="exampleInputEmail1">Email address</label>
+				<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+				<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+			</div>
+			<div class="form-group">
+				<label for="exampleInputPassword1">Password</label>
+				<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+			</div>
+			<div class="form-group form-captcha">
+				<!-- Captcha is filled in here -->
+			</div>
+			<button type="submit" class="btn btn-primary" disabled>Submit</button>
+		</form>
+	</div>
+</body>
+</html>
