@@ -20,7 +20,7 @@ Or via JavaScript (jQuery) like this:
 
 `$('div.my-selector').brogit_captcha(difficulty, hashes, key, callback);`
 
--
+___
 
 And you have to write a _callback_ function, which is executed when the captcha is done.
 
