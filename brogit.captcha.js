@@ -28,7 +28,7 @@ $.fn.extend({
 		$(this).attr('data-key', key);
 		$(this).attr('data-callback', callback.name);
 
-		var text_vertify = 'Vertify me';
+		var text_verify = 'Verify me';
 
 		var proof_it = function(element) {
 			var nonces = [];
@@ -68,7 +68,7 @@ $.fn.extend({
 		};
 
 		var uid = Math.round(Math.random() * 1000000);
-		var button = $('<div class="custom-control custom-checkbox mr-sm-2"><input type="checkbox" class="custom-control-input" id="brogit-captcha-button-'+uid+'"><label class="custom-control-label" for="brogit-captcha-button-'+uid+'">'+text_vertify+'</label></div>');
+		var button = $('<div class="custom-control custom-checkbox mr-sm-2"><input type="checkbox" class="custom-control-input" id="brogit-captcha-button-'+uid+'"><label class="custom-control-label" for="brogit-captcha-button-'+uid+'">'+text_verify+'</label></div>');
 
 		button.one('click', function() {
 			var progressbar = $('<div class="progress" style="display:none;"><div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>');
