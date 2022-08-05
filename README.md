@@ -3,6 +3,11 @@ Simple JS Proof of Work Captcha
 
 Livedemo: http://developer.brogit.de/brogit-captcha/client.html
 
+## Requirements
+
+jQuery >= 3.x
+Bootstrap >= 5.x
+
 ## How it works
 
 The client is generating hashes with __key__+nonce which have leading zero's (__difficulty__). The start nonce is a random number.
