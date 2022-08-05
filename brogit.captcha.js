@@ -1,8 +1,13 @@
 /*!
-  * brogit captcha v1.19.8 (https://brogit.de/)
-  * 2019 Copyright (c) brogit
-  * Requirements: jQuery 3, Bootstrap 4, sha256.min.js
+  * brogit captcha v1.22.8 (https://brogit.de/)
+  * 2022 Copyright (c) brogit
+  * Requirements: jQuery 3.x, Bootstrap 5.x, sha256.min.js
   */
+
+var brogit_captcha_locale = {
+	'en-US': 'Verify me',
+	'de-DE': 'Verifiziere mich',
+}
 
 /**
  * Generic jQuery extension
@@ -28,7 +33,22 @@ $.fn.extend({
 		$(this).attr('data-key', key);
 		$(this).attr('data-callback', callback.name);
 
-		var text_verify = 'Verify me';
+		var text_verify = brogit_captcha_locale['en-US'];
+
+		var language = navigator.language || navigator.userLanguage;
+
+		if(language in brogit_captcha_locale) {
+			text_verify = brogit_captcha_locale[language];
+		}
+		// search for first language code bracket
+		else {
+			var language_bracket = language.split('-')[0];
+			var result = Object.keys(brogit_captcha_locale).find(function(a) { return a.split('-')[0] == language_bracket });
+
+			if(result) {
+				text_verify = brogit_captcha_locale[result];
+			}
+		}
 
 		var proof_it = function(element) {
 			var nonces = [];
@@ -68,7 +88,7 @@ $.fn.extend({
 		};
 
 		var uid = Math.round(Math.random() * 1000000);
-		var button = $('<div class="custom-control custom-checkbox mr-sm-2"><input type="checkbox" class="custom-control-input" id="brogit-captcha-button-'+uid+'"><label class="custom-control-label" for="brogit-captcha-button-'+uid+'">'+text_verify+'</label></div>');
+		var button = $('<div class="form-check me-sm-2"><input class="form-check-input" type="checkbox" id="brogit-captcha-button-'+uid+'"><label class="form-check-label" for="brogit-captcha-button-'+uid+'">'+text_verify+'</label></div>');
 
 		button.one('click', function() {
 			var progressbar = $('<div class="progress" style="display:none;"><div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>');
