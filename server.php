@@ -46,12 +46,14 @@ if($path_info == '/captcha') {
 				'difficulty'=> $difficulty,
 				'hashes' 	=> $hashes,
 				'key' 		=> $key,
-				'expire'	=> time() + 300	//5min
+				// You may use a expire feature
+				'expire'	=> time() + 300	// 5 minutes
 			];
 
 			break;
 
 		case 'post':
+			// Check if all params are set
 			if(!isset(
 				$_POST['token'],
 				$_SESSION['captcha'],
@@ -61,11 +63,14 @@ if($path_info == '/captcha') {
 				$_SESSION['captcha']['expire'])
 			) {
 				$response->{'error'} = 'Params not set';
+				http_response_code(400);
 				break;
 			}
 
+			// Check if solved in given time (line 50)
 			if(time() > $_SESSION['captcha']['expire']) {
 				$response->{'error'} = 'Time Expired';
+				http_response_code(400);
 				break;
 			}
 
@@ -75,12 +80,20 @@ if($path_info == '/captcha') {
 			$hashes = $_SESSION['captcha']['hashes'];
 			$key = $_SESSION['captcha']['key'];
 
-			$response->{'status'} = proof_the_work($token, $difficulty, $hashes, $key) ? 'success' : 'failed';
+			if(!proof_the_work($token, $difficulty, $hashes, $key)) {
+				$response->{'status'} = 'failed';
+				http_response_code(400);
+				break;
+			}
+
+			$response->{'status'} = 'success';
+			http_response_code(200);
 
 			break;
 		
 		default:
 			# code...
+			http_response_code(501);
 			break;
 	}
 }
