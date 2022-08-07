@@ -10,31 +10,83 @@ Bootstrap >= 5.x
 
 ## How it works
 
-The client is generating hashes with __key__+nonce which have leading zero's (__difficulty__). The start nonce is a random number.
+The client generates hashes with __key__+nonce that have leading zeros (__difficulty__). The starting nonce is a random number.
 
-These nonce's are sent back to the Server (__token__), which can fast check if they generate valid hashes with the __key__.
-__hashes__ are the count how much Hashes should be generated.
+These nonces are sent to the server (__token__).
+The server can quickly check if valid hashes were created with the __key__.
+__hashes__ is the number of how many hashes should be generated.
 
-## How to use
+## Usage
 
-You only have to place a HTML-Element like this:
+You just need to place a HTML-Element like this:
 
-`<div class="brogit-captcha" data-difficulty="2" data-hashes="100" data-key="1234567890" data-callback="captchaCallback">Load Captcha...</div>`
+```html
+<div class="brogit-captcha" data-difficulty="2" data-hashes="100" data-key="1234567890" data-callback="captchaCallback">Load Captcha...</div>
+```
 
 Or via JavaScript (jQuery) like this:
 
-`$('div.my-selector').brogit_captcha(difficulty, hashes, key, callback);`
+```javascript
+$('div.my-selector').brogit_captcha(difficulty, hashes, key, callback);
+```
 
 ___
 
-And you have to write a _callback_ function, which is executed when the captcha is done.
+A _callback_ function must be written which will be executed when the calculations are completed.
 
-The callback get the params:
+The callback function receives the following parameters:
 
-`callback(token, key, difficulty, hashes, element);`
+```javascript
+callback(token, key, difficulty, hashes, element);
+````
 
 * __token__ _string_ Its a base64 concatenation of nonces, limiter is ';'
-* __key__ _string_ The key which was used to generate valid hashes
-* __difficulty__ _int_ The count of the leading zeros the valid hashes should have
+* __key__ _string_ The key used to generate valid hashes
+* __difficulty__ _int_ The number of leading zeros a hash must have to be valid
 * __hashes__ _int_ The count how much hashes should be generated
 * __element__ _jQueryElement_ The element from which the callback is executed
+
+## Examples
+
+Checkout the _master_ branch for a client/server example.
+
+## Example Callback function
+
+```javascript
+function captchaCallback(token, key, difficulty, hashes, element) {
+	client.xhr('post', 'server.php/captcha', {token: token}, function(resultdata, data, textStatus, jqXHR) {
+		if(textStatus == 'success') {
+			element.addClass('bg-success');
+			$('form.captchaExample button[type="submit"]').attr('disabled', false);
+		}
+		else {
+			element.addClass('bg-danger');
+		}
+	});
+}
+```
+
+### Build via HTML-Template
+
+```html
+<div class="brogit-captcha" data-difficulty="{{difficulty}}" data-hashes="{{hashes}}" data-key="{{key}}" data-callback="captchaCallback">Load Captcha...</div>
+```
+
+### Build via AJAX-Request
+
+```javascript
+$(document).ready(function() {
+	client.xhr('get', 'server.php/captcha', null, function(resultdata, data, textStatus, jqXHR) {
+		if(resultdata.difficulty && resultdata.hashes && resultdata.key) {
+			var captcha = $('<div>Load Captcha...</div>');
+
+			captcha.brogit_captcha(resultdata.difficulty, resultdata.hashes, resultdata.key, captchaCallback);
+		}
+		else {
+			var captcha = $("<div>Can't load Captcha...</div>");
+		}
+
+		$('form.captchaExample .form-captcha').append(captcha);
+	});
+});
+```
