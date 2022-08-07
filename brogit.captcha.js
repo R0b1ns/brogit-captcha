@@ -1,12 +1,18 @@
 /*!
-  * brogit captcha v1.22.8 (https://brogit.de/)
+  * brogit captcha v22.8.7 (https://brogit.de/)
   * 2022 Copyright (c) brogit
-  * Requirements: jQuery 3.x, Bootstrap 5.x, sha256.min.js
+  * Requirements: jQuery 3.x, Bootstrap 5.x, sha256.min.js 0.9.0
   */
 
 var brogit_captcha_locale = {
 	'en-US': 'Verify me',
 	'de-DE': 'Verifiziere mich',
+	'nl-NL': 'Verifieer mij',
+	'es-ES': 'Verifícame',
+	'it-IT': 'Verificatemi',
+	'fr-FR': 'Vérifiez-moi',
+	'el-GR': 'Επαληθεύστε με',
+	'ru-RU': 'Проверьте меня',
 }
 
 /**
@@ -48,6 +54,9 @@ $.fn.extend({
 			if(result) {
 				text_verify = brogit_captcha_locale[result];
 			}
+			else {
+				console.warning("Language '" + language + "' is not supported.");
+			}
 		}
 
 		var proof_it = function(element) {
@@ -57,6 +66,7 @@ $.fn.extend({
 
 			var progress = 0;
 
+			// Interval length of 60 seconds
 			var nIntervId = setInterval(function() {
 
 				//
@@ -109,7 +119,7 @@ $.fn.extend({
 });
 
 function proof_of_work(difficulty, key, nonce, timelimit) {
-	//Timelimit to solve are 60sec
+	//Default time limit for the solution is 60 seconds
 	timelimit = timelimit || 60000;
 
 	var leading_zeros = '';
@@ -128,7 +138,7 @@ function proof_of_work(difficulty, key, nonce, timelimit) {
 
 		nonce++;
 	}
-	console.error("Cant solve Hash in accteptable Time");
+	console.error("Can't solve hash in accteptable time");
 	return false;
 }
 
