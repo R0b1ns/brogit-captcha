@@ -1,20 +1,39 @@
 # brogit-captcha
 Simple JS Proof of Work Captcha
 
++ for Bootstrap 5
++ Multilanguage support
+
 Livedemo: http://developer.brogit.de/brogit-captcha/client.html
 
 ## Requirements
 
-jQuery >= 3.x
-Bootstrap >= 5.x
+* jQuery >= 3.x
+* Bootstrap >= 5.x
+* sha256 >= 0.9.0
 
 ## How it works
 
-The client generates hashes with __key__+nonce that have leading zeros (__difficulty__). The starting nonce is a random number.
+The client generates hashes (sha256) with __key__+nonce that have leading zeros (__difficulty__). The starting nonce is a random number.
 
 These nonces are sent to the server (__token__).
 The server can quickly check if valid hashes were created with the __key__.
 __hashes__ is the number of how many hashes should be generated.
+
+The time limit for finding a hash is 60 seconds. If no hash is found within this time, the process is tried with a new random nonce.
+
+## Getting started
+
+```html
+<script
+	src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+<script src="https://cdn.brogit.de/brogit-captcha/brogit.captcha.min.js" async></script>
+```
 
 ## Usage
 
